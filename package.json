@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "node scripts/create-database.js",
+    "start": "nodemon -r dotenv/config index.js",
+    "pretest": "node scripts/create-database.js test",
+    "test": "mocha tests/**/*.test.js --no-opts .mocha.opts",
+    "posttest": "node scripts/drop-database.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,12 +19,15 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.5",
+    "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^4.19.1",
     "eslint-config-mcr-codes": "^1.3.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.9.1",
-    "nodemon": "^2.0.4"
+    "mocha": "^7.1.2",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
   }
 }
