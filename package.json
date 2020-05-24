@@ -7,7 +7,7 @@
     "prestart": "node scripts/create-database.js",
     "start": "nodemon -r dotenv/config index.js",
     "pretest": "node scripts/create-database.js test",
-    "test": "mocha tests/**/*.test.js --no-opts .mocha.opts",
+    "test": "mocha tests/**/*.test.js",
     "posttest": "node scripts/drop-database.js"
   },
   "author": "",
