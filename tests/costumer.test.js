@@ -21,18 +21,53 @@ describe('/costumers', () => {
   });
 
   describe('POST /costumers', () => {
-    it('creates a new costumer in the database', async () => {
-      const response = await request(app).post('/costumers').send({
-        name: 'Sofia',
-        address: 'Avenue 15',
+    it('creates a new costumer in the database', (done) => {
+      request(app)
+        .post('/costumers')
+        .send({
+          name: 'Sofia',
+          address: 'Avenue 15',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(201);
+
+          Costumer.findByPk(res.body.id, { raw: true }).then((costumer) => {
+            expect(costumer.name).to.equal('Sofia');
+            expect(costumer.address).to.equal('Avenue 15');
+            done();
+          });
+        });
+    });
+  });
+
+  describe('with costumers in the database', () => {
+    let costumers;
+    beforeEach((done) => {
+      Promise.all([
+        Costumer.create({ name: 'Sofia', address: 'Avenue 15' }),
+        Costumer.create({ name: 'Joe', address: 'Street 4' }),
+        Costumer.create({ name: 'Mihn', address: 'Road 11' }),
+      ]).then((documents) => {
+        costumers = documents;
+        done();
       });
+    });
 
-      await expect(response.status).to.equal(201);
-      await expect(response.body.name).to.equal('Sofia');
-
-      const costumerRecords = await Costumer.findByPk(response.body.id, { raw: true });
-      await expect(costumerRecords.name).to.equal('Sofia');
-      await expect(costumerRecords.address).to.equal('Avenue 15');
+    describe('GET /costumers', () => {
+      it('gets all costumers records', (done) => {
+        request(app)
+          .get('/costumers')
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(3);
+            res.body.forEach((costumer) => {
+              const expected = costumers.find((c) => c.id === costumer.id);
+              expect(costumer.name).to.equal(expected.name);
+              expect(costumer.address).to.equal(expected.address);
+            });
+            done();
+          });
+      });
     });
   });
 });
