@@ -98,7 +98,7 @@ describe('/costumers', () => {
           .patch(`/costumers/${costumer.id}`)
           .send({ name: 'Maria' })
           .then((res) => {
-            expect(res.status).to.equal(204);
+            expect(res.status).to.equal(200);
             Costumer.findByPk(costumer.id, { raw: true }).then((updatedCostumer) => {
               expect(updatedCostumer.name).to.equal('Maria');
               done();
@@ -112,7 +112,7 @@ describe('/costumers', () => {
           .patch(`/costumers/${costumer.id}`)
           .send({ address: 'Chatedral Way 12' })
           .then((res) => {
-            expect(res.status).to.equal(204);
+            expect(res.status).to.equal(200);
             Costumer.findByPk(costumer.id, { raw: true }).then((updatedCostumer) => {
               expect(updatedCostumer.address).to.equal('Chatedral Way 12');
               done();
@@ -120,6 +120,29 @@ describe('/costumers', () => {
           });
       });
 
+      it('returns a 404 if no costumer is found', (done) => {
+        request(app)
+          .get('/costumers/12345')
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal('Sorry, there is no costumer with such id.');
+            done();
+          });
+      });
+    });
+    describe('DELETE /costumers/:costumerId', () => {
+      it('deletes a costumer by id', (done) => {
+        const costumer = costumers[0];
+        request(app)
+          .delete(`/costumers/${costumer.id}`)
+          .then((res) => {
+            expect(res.status).to.equal(204);
+            Costumer.findByPk(costumer.id, { raw: true }).then((deletedCostumer) => {
+              expect(deletedCostumer).to.equal(null);
+              done();
+            });
+          });
+      });
       it('returns a 404 if no costumer is found', (done) => {
         request(app)
           .get('/costumers/12345')

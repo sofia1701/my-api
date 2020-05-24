@@ -22,7 +22,7 @@ exports.listCostumerById = (req, res) => {
   });
 };
 
-exports.updateCostumerNameById = (req, res) => {
+exports.updateCostumerById = (req, res) => {
   const { costumerId } = req.params;
   Costumer.findByPk(costumerId).then((costumer) => {
     if (!costumer) {
@@ -32,7 +32,22 @@ exports.updateCostumerNameById = (req, res) => {
     }
     Costumer.update(req.body, { where: { id: costumerId } })
       .then((updatedCostumer) => {
-        return res.status(204).json(updatedCostumer);
+        return res.status(200).json(updatedCostumer);
+      });
+  });
+};
+
+exports.deleteCostumerById = (req, res) => {
+  const { costumerId } = req.params;
+  Costumer.findByPk(costumerId).then((costumer) => {
+    if (!costumer) {
+      return res
+        .status(404)
+        .json({ error: 'Sorry, there is no costumer with such id.' });
+    }
+    Costumer.destroy({ where: { id: costumerId } })
+      .then((deletedCostumer) => {
+        return res.status(204).json(deletedCostumer);
       });
   });
 };

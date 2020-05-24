@@ -10,6 +10,7 @@ router.route('/')
 
 router.route('/:costumerId')
   .get(costumerController.listCostumerById)
-  .patch(costumerController.updateCostumerNameById);
+  .patch(costumerController.updateCostumerById)
+  .delete(costumerController.deleteCostumerById);
 
 module.exports = router;
