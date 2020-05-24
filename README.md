@@ -9,11 +9,11 @@ Simple express app which uses sequelize to interact with a MySQL database.
 
 Create a .env and a .env.test file with the following variables:
 
-  DB_PASSWORD=PASSWORD
-  DBNAME=APPNAME
-  DB_USER=root
-  DB_HOST=localhost
-  DB_PORT=3306
+    DB_PASSWORD=PASSWORD
+    DBNAME=APPNAME
+    DB_USER=root
+    DB_HOST=localhost
+    DB_PORT=3306
 
 Make sure the DBNAME in you .env.test has a different name.
 
