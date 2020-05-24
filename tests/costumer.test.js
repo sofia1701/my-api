@@ -70,7 +70,7 @@ describe('/costumers', () => {
       });
     });
     describe('GET /costumers/:costumerId', () => {
-      it('gets all costumers records by id', (done) => {
+      it('gets costumers records by id', (done) => {
         const costumer = costumers[0];
         request(app)
           .get(`/costumers/${costumer.id}`)
@@ -79,6 +79,30 @@ describe('/costumers', () => {
             expect(res.body.name).to.equal(costumer.name);
             expect(res.body.address).to.equal(costumer.address);
             done();
+          });
+      });
+      it('returns a 404 if no costumer is found', (done) => {
+        request(app)
+          .get('/costumers/12345')
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal('Sorry, there is no costumer with such id.');
+            done();
+          });
+      });
+    });
+    describe('PATCH /costumers/:costumerId', () => {
+      it('updates costumer name by id', (done) => {
+        const costumer = costumers[0];
+        request(app)
+          .patch(`/costumers/${costumer.id}`)
+          .send({ name: 'Maria' })
+          .then((res) => {
+            expect(res.status).to.equal(204);
+            Costumer.findByPk(costumer.id, { raw: true }).then((updatedCostumer) => {
+              expect(updatedCostumer.name).to.equal('Maria');
+              done();
+            });
           });
       });
       it('returns a 404 if no costumer is found', (done) => {

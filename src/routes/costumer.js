@@ -9,6 +9,7 @@ router.route('/')
   .get(costumerController.listCostumer);
 
 router.route('/:costumerId')
-  .get(costumerController.listCostumerById);
+  .get(costumerController.listCostumerById)
+  .patch(costumerController.updateCostumerNameById);
 
 module.exports = router;
