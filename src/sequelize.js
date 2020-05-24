@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+const CustomerModel = require('./models/costumer');
+
 const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
 
 const setupDatabase = () => {
@@ -10,9 +12,11 @@ const setupDatabase = () => {
     logging: false,
   });
 
+  const Costumer = CustomerModel(sequelize, Sequelize);
+
   sequelize.sync({ alter: true });
   return {
-
+    Costumer,
   };
 };
 
