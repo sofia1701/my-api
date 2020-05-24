@@ -105,6 +105,21 @@ describe('/costumers', () => {
             });
           });
       });
+
+      it('updates costumer address by id', (done) => {
+        const costumer = costumers[0];
+        request(app)
+          .patch(`/costumers/${costumer.id}`)
+          .send({ address: 'Chatedral Way 12' })
+          .then((res) => {
+            expect(res.status).to.equal(204);
+            Costumer.findByPk(costumer.id, { raw: true }).then((updatedCostumer) => {
+              expect(updatedCostumer.address).to.equal('Chatedral Way 12');
+              done();
+            });
+          });
+      });
+
       it('returns a 404 if no costumer is found', (done) => {
         request(app)
           .get('/costumers/12345')
