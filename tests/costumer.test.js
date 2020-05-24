@@ -69,5 +69,27 @@ describe('/costumers', () => {
           });
       });
     });
+    describe('GET /costumers/:costumerId', () => {
+      it('gets all costumers records by id', (done) => {
+        const costumer = costumers[0];
+        request(app)
+          .get(`/costumers/${costumer.id}`)
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.name).to.equal(costumer.name);
+            expect(res.body.address).to.equal(costumer.address);
+            done();
+          });
+      });
+      it('returns a 404 if no costumer is found', (done) => {
+        request(app)
+          .get('/costumers/12345')
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal('Sorry, there is no costumer with such id.');
+            done();
+          });
+      });
+    });
   });
 });

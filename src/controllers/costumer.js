@@ -5,5 +5,17 @@ exports.createCostumer = (req, res) => {
 };
 
 exports.listCostumer = (req, res) => {
-  Costumer.findAll().then(costumers => res.status(200).json(costumers));
+  Costumer.findAll().then((costumers) => {
+    return res.status(200).json(costumers);
+  });  
+};
+
+exports.listCostumerById = (req, res) => {
+  const { costumerId } = req.params;
+  Costumer.findByPk(costumerId).then((costumer) => {
+    if (!costumer) {
+      return res.status(404).json({ error: 'Sorry, there is no costumer with such id.' });
+    }
+    return res.status(200).json(costumer);
+  });
 };
